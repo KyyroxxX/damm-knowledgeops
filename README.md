@@ -10,6 +10,23 @@
 
 ---
 
+## AVISO LEGAL Y POLITICA DE DATOS SINTETICOS / LEGAL DISCLAIMER
+
+> [!IMPORTANT] Marco del Proyecto y Seguridad de la Informacion
+> **Castellano:**
+> Este repositorio constituye una **propuesta tecnica, academica y de arquitectura cloud** desarrollada como solucion al reto de innovacion abierta **MetròpolisFPLab** presentado por **Damm**.
+> - **Cero Datos Corporativos Reales:** Este repositorio **NO contiene, utiliza ni expone ninguna documentacion confidencial, secretos industriales, recetas de elaboracion, credenciales internas ni acceso a redes de Damm**.
+> - **Entorno de Datos Sinteticos:** El 100% de los manuales tecnicos de maquinaria, codigos de averia, diagramas de troubleshooting y evaluaciones de operarios utilizados en este prototipo son **completamente sinteticos, ficticios o basados en especificaciones publicas genericas de fabricantes OEM**.
+> - **Arquitectura Aislada:** La solucion esta disenada bajo el principio de *Customer-Owned Infrastructure*, concebida para que Damm pueda desplegarla de manera independiente dentro de su propia cuenta corporativa de AWS con sus propias claves KMS tras una transferencia formal.
+>
+> **English:**
+> This repository represents an **academic cloud architecture and software engineering proposal** developed for the **MetròpolisFPLab** open innovation challenge presented by **Damm**.
+> - **Zero Production Data Policy:** This repository does **NOT contain, access, or expose any confidential Damm systems, real production recipes, employee records, internal network endpoints, or private credentials**.
+> - **Synthetic Dataset:** All machinery manuals, maintenance SOPs, error codes, and assessment quizzes used across this codebase are **100% synthetic, fictional, or derived from generic public OEM equipment specifications**.
+> - **Air-Gapped Design:** The architecture follows strict zero-trust parameters, designed to be deployed independently inside Damm's private AWS account via parameterized Terraform modules upon formal handover.
+
+---
+
 ## 1. Project Overview
 
 **Damm KnowledgeOps** is an enterprise-grade cloud-native platform designed as a proposed solution for the **MetròpolisFPLab** innovation challenge presented by **Damm**.
@@ -87,7 +104,18 @@ The platform transforms tacit, fragmented industrial knowledge into structured, 
 
 ---
 
-## 4. Cost Engineering Framework
+## 4. Responsible AI & Industrial Safety Guarantees
+
+In an industrial beverage packaging environment, an unverified AI recommendation could cause machinery damage or occupational hazards. This platform implements 4 strict safety barriers:
+
+1. **Mandatory Document Grounding:** The assistant is mathematically restricted to the approved text chunks passed inside `<approved_procedures>` tags. It is instructed to reject answering if data is missing.
+2. **Exact Citations:** Every operational output contains the document source identifier and chunk index (`[Fuente: manual_embotellado.txt | Fragmento: 0]`).
+3. **Prompt Injection Defense:** Strict XML delimitation between system instructions and operator prompts prevents jailbreaks or unauthorized directive overrides.
+4. **Human Supervisor Escalation:** Critical interventions (electrical LOTO, steam, high pressure) trigger an automated escalation event in DynamoDB for human verification.
+
+---
+
+## 5. Cost Engineering Framework
 
 This platform is engineered to operate strictly within a **0 - 5 EUR / month** development budget:
 - **No permanent servers:** Zero EC2 instances and zero NAT Gateways.
@@ -98,7 +126,7 @@ This platform is engineered to operate strictly within a **0 - 5 EUR / month** d
 
 ---
 
-## 5. Repository Structure
+## 6. Repository Structure
 
 ```
 .
@@ -113,6 +141,8 @@ This platform is engineered to operate strictly within a **0 - 5 EUR / month** d
 │   │   ├── main.py              # FastAPI application entrypoint (Mangum ASGI)
 │   │   ├── rag_engine.py        # Vector similarity search & metadata filtering
 │   │   └── training.py          # Operator learning paths & assessment routes
+│   ├── scripts/
+│   │   └── generate_synthetic_docs.py # Generator for fictional plant procedures
 │   └── tests/                   # Pytest automated test suite
 ├── frontend/                    # Next.js 14 App Router (TypeScript + Tailwind CSS)
 ├── infrastructure/
@@ -125,15 +155,16 @@ This platform is engineered to operate strictly within a **0 - 5 EUR / month** d
 │       ├── providers.tf         # AWS provider definition (eu-west-1)
 │       └── storage.tf           # S3 raw/processed buckets & KMS customer-managed key
 ├── docs/                        # Architecture guides, threat models & handover procedures
+│   ├── HANDOVER_GUIDE.md        # Technical transfer guide for Damm's IT team
+│   └── SECURITY_AND_COMPLIANCE.md # Security posture, threat model & compliance analysis
 ├── .gitignore                   # Strict security exclusions (no keys, no .env, no state files)
 └── README.md                    # Project documentation
 ```
 
 ---
 
-## 6. Academic & Challenge Context
+## 7. Compliance & Responsible Disclosure
 
-* **Program:** MetròpolisFPLab Innovation Challenge
-* **Corporate Partner:** Damm
-* **Project:** Damm KnowledgeOps
-* **Status:** Under Active Development
+* **Academic Program:** MetròpolisFPLab Open Innovation Challenge
+* **Corporate Challenge:** Damm
+* **Ethics & Compliance:** Strictly complies with OWASP Top 10 for LLMs, zero hardcoded credentials, and 100% synthetic operational data.
