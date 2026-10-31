@@ -61,7 +61,7 @@ The platform transforms tacit, fragmented industrial knowledge into structured, 
                                               [ AWS_PROXY Lambda Trigger ]
                                                                   v
 +=======================================================================================================+
-| AWS Serverless Backend (eu-west-1)                                                                    |
+AWS Serverless Backend (eu-west-1)                                                                    |
 |                                                                                                       |
 |  +-------------------------------------------------------------------------------------------------+  |
 |  | AWS Lambda: damm-kops-backend-api (Python 3.11 + FastAPI + Mangum)                              |  |
@@ -126,7 +126,20 @@ This platform is engineered to operate strictly within a **0 - 5 EUR / month** d
 
 ---
 
-## 6. Repository Structure
+## 6. Enterprise Scaling & Production Roadmap
+
+For organizations adopting this system at scale (such as **Damm** moving beyond the MetròpolisFPLab pilot to full multi-plant production), a comprehensive enterprise scaling roadmap is available:
+
+- **Enterprise Proposal & TCO:** Detailed in [`docs/ENTERPRISE_PROFESSIONALIZATION_PROPOSAL.md`](file:///c:/Users/Creep/Documents/Git%20Repositorios/damm-knowledgeops/docs/ENTERPRISE_PROFESSIONALIZATION_PROPOSAL.md).
+- **Hybrid Networking:** AWS Transit Gateway, AWS Direct Connect and AWS PrivateLink VPC Endpoints.
+- **Corporate Identity:** SAML 2.0 / SCIM federation with Microsoft Entra ID (Azure AD) and Okta.
+- **Bedrock Guardrails:** Managed PII masking, custom blocked topics (brewery formulas, IP) and automated hallucination filters.
+- **Industrial Edge Resiliency:** Local offline fallback via AWS Outposts / IoT Greengrass for zero downtime during WAN outages.
+- **SIEM Integration:** Real-time log streaming to Splunk, Wazuh Enterprise, or Datadog via Amazon Kinesis Firehose.
+
+---
+
+## 7. Repository Structure
 
 ```
 .
@@ -152,9 +165,13 @@ This platform is engineered to operate strictly within a **0 - 5 EUR / month** d
 │       ├── database.tf          # DynamoDB tables (documents, incidents, training)
 │       ├── ingestion.tf         # S3 document processing Lambda trigger
 │       ├── observability.tf     # CloudWatch log groups (14-day retention) & alarms
+│       ├── outputs.tf           # Terraform output parameters
 │       ├── providers.tf         # AWS provider definition (eu-west-1)
-│       └── storage.tf           # S3 raw/processed buckets & KMS customer-managed key
+│       ├── storage.tf           # S3 raw/processed buckets & KMS customer-managed key
+│       └── variables.tf         # Parameterized environment variables
 ├── docs/                        # Architecture guides, threat models & handover procedures
+│   ├── ARCHITECTURE_AND_RAG.md  # Deep dive into RAG vector math & cost optimizations
+│   ├── ENTERPRISE_PROFESSIONALIZATION_PROPOSAL.md # Enterprise roadmap for Damm production
 │   ├── HANDOVER_GUIDE.md        # Technical transfer guide for Damm's IT team
 │   └── SECURITY_AND_COMPLIANCE.md # Security posture, threat model & compliance analysis
 ├── .gitignore                   # Strict security exclusions (no keys, no .env, no state files)
@@ -163,7 +180,7 @@ This platform is engineered to operate strictly within a **0 - 5 EUR / month** d
 
 ---
 
-## 7. Compliance & Responsible Disclosure
+## 8. Compliance & Responsible Disclosure
 
 * **Academic Program:** MetròpolisFPLab Open Innovation Challenge
 * **Corporate Challenge:** Damm
