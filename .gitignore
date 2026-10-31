@@ -1,0 +1,42 @@
+# Environment Variables and Secrets
+*.env
+*.env.*
+*.pem
+*.key
+credentials
+.aws/
+
+# Terraform Local State and Providers
+*.tfstate
+*.tfstate.*
+crash.log
+.terraform/
+.terraform.lock.hcl
+terraform.tfvars
+
+# Python Bytecode and Virtual Environments
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+dist/
+build/
+*.egg-info/
+.pytest_cache/
+
+# Node.js and Next.js Build Artifacts
+node_modules/
+.next/
+out/
+npm-debug.log*
+yarn-debug.log*
+.pnpm-debug.log*
+
+# IDE and OS Metadata
+.vscode/
+.idea/
+*.swp
+Thumbs.db
+.DS_Store
