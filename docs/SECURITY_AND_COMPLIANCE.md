@@ -1,37 +1,41 @@
 # Security, Compliance & Data Governance — Damm KnowledgeOps
 
 > [!IMPORTANT] Proposito de este Documento
-> Este documento detalla la postura de seguridad, el gobierno del dato y los controles de cumplimiento normativo implementados en **Damm KnowledgeOps**. Explica formalmente por que este repositorio de investigacion es completamente seguro para su exposicion publica y como garantiza la total inocuidad respecto a los activos reales de **Damm**.
+> Este documento detalla la postura de seguridad, el gobierno del dato y los controles de cumplimiento normativo implementados en **Damm KnowledgeOps**. Explica formalmente por que este repositorio de investigacion es completamente seguro para su exposicion publica en carteras profesionales (GitHub/LinkedIn), garantizando la total inocuidad e inviolabilidad respecto a los activos reales de **Damm**.
 
 ---
 
-## 1. Politica de Datos Sinteticos (Zero Production Data)
+## 1. Matriz de Seguridad: Que es Publico vs. Que se Mantiene Privado
 
-Para cumplir con los estandares eticos de innovacion abierta en el reto **MetròpolisFPLab**:
+Para compatibilizar la demostracion tecnica ante reclutadores con la proteccion absoluta de la confidencialidad de Damm, el repositorio opera bajo una estricta segregacion de activos:
 
-1. **Aislamiento Total de Activos:** Este proyecto **no tiene conexion con ninguna red, base de datos, API interna ni entorno de produccion de Damm**.
-2. **Documentacion 100% Simulada:** Todos los procedimientos operativos (SOP), codigos de error de maquinaria (e.g. lineas de embotellado Krones, transportadores de palets, sistemas CIP de limpieza) y preguntas de evaluacion son **generados sinteticamente** o extraidos de manuales genericos publicos de fabricantes de maquinaria industrial.
-3. **Ausencia de Propiedad Intelectual Privada:** No se incluyen recetas de elaboracion cervecera, proporciones de materias primas, parametros de fermentacion confidenciales ni planos industriales propietarios.
-4. **Datos de Personal Ficticios:** No se utilizan nombres, correos electronicos ni identificadores de empleados reales de Damm. Todos los usuarios de prueba corresponden a cuentas sinteticas de laboratorio (`op_alex`, `supervisor_demo`, etc.).
+| Categoria | Activo Corporativo Real de Damm (100% Protegido / Inexistente en Repo) | Implementacion en este Repositorio (Publico y Seguro) |
+|---|---|---|
+| **Infraestructura de Red** | Redes de fabrica (OT), rangos IP internos, routers, gateways industriales, VPNs. | **Air-Gapped Cloud:** Arquitectura Serverless en cuenta AWS aislada sin conexion a ninguna red fisica o corporativa. |
+| **Sistemas de Control (SCADA/PLC)** | Automatas Siemens/Rockwell, buses Profinet/Modbus, pantallas HMI de planta. | **Zero Hardware Coupling:** Sistema puramente documental en modo lectura; sin integracion con PLCs ni actuadores fisicos. |
+| **Documentacion y Manuales** | Planos tecnicos confidenciales, fichas de calibracion internas, especificaciones de planta. | **Dataset Sintetico:** 100% de manuales generados por script (`generate_synthetic_docs.py`) basados en especificaciones genericas OEM. |
+| **Recetas y Propiedad Intelectual** | Formulaciones de cerveza, proporciones de malta/lupulo, curvas de maceracion y fermentacion. | **Exclusion Total:** Ninguna mencion a ingredientes, recetas, quimica cervecera o metodos de elaboracion propietarios. |
+| **Identidad y Personal** | Nombres de empleados, correos corporativos `@damm.com`, turnos, registros disciplinarios. | **Directorio Efimero de Pruebas:** Cuentas simuladas en Amazon Cognito (`op_alex`, `supervisor_demo`) con correos de pruebas ficticios. |
+| **Credenciales y Secretos** | API Keys de produccion, claves IAM, certificados TLS corporativos, contrasenas. | **Zero Hardcoded Secrets:** Sin claves ni IDs fijos; Terraform usa `aws_caller_identity`; escaneo continuo por Gitleaks. |
+| **Identificadores de Cuenta Cloud** | ID de cuenta AWS de Damm, ARNs de KMS corporativos, VPC IDs productivas. | **Parametrizacion Completa:** Modulos Terraform portables sin IDs harcodeados, listos para despliegue parametrizado. |
 
 ---
 
-## 2. Prevencion de Fugas de Informacion y Secretos
+## 2. Inmunidad Frente a Reconocimiento y Ciberataques (Reconnaissance Defense)
 
-El repositorio implementa una estrategia multicapa para garantizar que ninguna credencial pueda ser expuesta:
+Si un atacante externo analiza este repositorio publico buscando vectores para vulnerar a Damm, se encontrara con un entorno disenado para ser un **punto ciego (dead end)**:
 
-```
-[ Desarrollador ] ---> [ .gitignore Estricto ] ---> [ Gitleaks (Pre-Commit / CI) ] ---> [ GitHub Public ]
-                               |                                 |
-                     Bloquea *.env, *.pem,             Analiza entropia y
-                     *.key, *.tfstate, .aws/           patrones de API keys
-```
+1. **Ausencia de Metadatos de Infraestructura Interna:**
+   - No se publican nombres de dominios internos (`*.corp.damm.es`), endpoints de intranets ni configuraciones de proxy inverso vinculadas a redes reales.
+   - El archivo `.gitignore` previene la subida accidental de archivos de estado de Terraform (`*.tfstate`), que podrian contener identificadores de infraestructura.
 
-### Controles Automatizados en CI/CD:
-* **Gitleaks:** Escaneo criptografico de patrones de claves privadas, access keys de AWS y tokens de Cognito en cada commit.
-* **Semgrep SAST:** Analisis estatico del codigo fuente para prevenir inyecciones NoSQL en DynamoDB y vulnerabilidades en FastAPI.
-* **Trivy:** Escaneo de dependencias en `requirements.txt` frente a bases de datos de vulnerabilidades conocidas (CVE).
-* **Checkov:** Auditoria estatica de seguridad sobre los manifiestos de Terraform (garantizando bloqueo de acceso publico en S3 y cifrado KMS).
+2. **Aislamiento Criptografico en AWS:**
+   - Todos los datos en reposo (DynamoDB y S3) se cifran mediante una clave de cliente gestionada (KMS CMK) creada en el entorno de desarrollo del creador.
+   - La transferencia a produccion descrita en `HANDOVER_GUIDE.md` instruye a Damm a aprovisionar su propia clave KMS dentro de su cuenta corporativa, manteniendo el control criptografico total.
+
+3. **Prevencion de Inyecciones y Fugas en el Asistente:**
+   - La API de Amazon Bedrock se invoca mediante el rol IAM de ejecucion de Lambda, sin exponer API keys en codigo cliente.
+   - La sanitizacion estricta de prompts previene ataques de extraccion de contexto (Prompt Leaking) o evasion de instrucciones (Jailbreaking).
 
 ---
 
@@ -55,9 +59,33 @@ El repositorio implementa una estrategia multicapa para garantizar que ninguna c
 
 ---
 
-## 5. Declaracion de Transferencia Segura
+## 5. Pipeline DevSecOps Automatizado
+
+Cada cambio en el codigo fuente pasa por 4 fases de seguridad automatizadas en GitHub Actions antes de ser aceptado:
+
+```
+[ Git Push ]
+     │
+     ├── 1. Gitleaks       --> Deteccion de credenciales, access keys y certificados
+     ├── 2. Semgrep SAST   --> Analisis estatico de codigo Python/FastAPI (CWE/OWASP)
+     ├── 3. Trivy FS       --> Escaneo de vulnerabilidades en dependencias (CVE)
+     └── 4. Checkov IaC    --> Auditoria de seguridad en manifiestos Terraform
+```
+
+---
+
+## 6. Declaracion de Transferencia Segura
 
 Este diseno permite que **Damm traslade y despliegue el sistema al 100% dentro de su propio tenant de AWS**:
 * Los manifiestos de Terraform estan completamente parametrizados mediante variables (`aws_region`, `environment`, `project_name`).
 * No existen identificadores de cuenta de AWS hardcodeados; Terraform utiliza la llamada dinamica `data.aws_caller_identity.current.account_id`.
 * En un entorno de produccion dentro de Damm, los buckets sinteticos se reemplazan simplemente cargando la documentacion tecnica corporativa real validada por sus propios ingenieros.
+
+---
+
+## 7. Contacto de Divulgacion Responsable (Responsible Disclosure)
+
+Si un miembro del equipo de ciberseguridad de Damm o un investigador de seguridad detecta cualquier discrepancia o aspecto susceptible de mejora en este prototipo academico:
+
+- **Canal de Notificacion:** A traves de GitHub Issues de este repositorio o via correo electronico indicado en el perfil del autor.
+- **Compromiso de Respuesta:** Revision y mitigacion inmediata en menos de 24 horas.
