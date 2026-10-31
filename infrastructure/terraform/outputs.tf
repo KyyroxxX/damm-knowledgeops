@@ -27,3 +27,13 @@ output "kms_key_arn" {
   description = "ARN de la clave KMS CMK utilizada para el cifrado"
   value       = aws_kms_key.damm_kops_key.arn
 }
+
+output "bedrock_guardrail_id" {
+  description = "ID del Guardrail de Bedrock para control de prompts y PII"
+  value       = aws_bedrock_guardrail.damm_kops_guardrail.guardrail_id
+}
+
+output "guardduty_detector_id" {
+  description = "ID del detector de GuardDuty activo"
+  value       = aws_guardduty_detector.primary.id
+}

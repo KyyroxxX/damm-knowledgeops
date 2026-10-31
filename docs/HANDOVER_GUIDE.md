@@ -7,16 +7,19 @@
 
 ## 1. Opciones de Despliegue en la Cuenta de Damm
 
-El proyecto soporta dos modalidades de operacion dentro de la infraestructura corporativa de Damm:
+El proyecto soporta tres modalidades escalonadas de despliegue dentro de la infraestructura corporativa de Damm:
 
-1. **Modalidad A: Despliegue Directo Serverless (Low TCO / Piloto Inicial):**
-   - Mantiene la arquitectura serverless original basada en AWS Lambda, DynamoDB y Amazon Bedrock con indices en S3.
-   - Coste mensual insignificante (~$5 - $30 USD/mes segun uso).
-   - Ideal para pruebas piloto en una sola linea de envasado o centro de formacion.
+1. **Tier 1: Despliegue Lean Serverless (~32 EUR/mes):**
+   - Arquitectura 100% Serverless Pay-per-Use con Lambda, DynamoDB, Bedrock Guardrails y almacenamiento cifrado en S3.
+   - Ideal para pruebas piloto acotadas en una sola linea de envasado o en el centro de formacion tecnica.
    
-2. **Modalidad B: Arquitectura Enterprise de Alta Seguridad (Produccion Multi-Planta):**
-   - Incorpora VPC privada con AWS PrivateLink, federacion SSO con Microsoft Entra ID, Bedrock Guardrails, OpenSearch Serverless, AWS WAF y enlace con el SIEM corporativo.
-   - Consultar la especificacion completa en: [`ENTERPRISE_PROFESSIONALIZATION_PROPOSAL.md`](file:///c:/Users/Creep/Documents/Git%20Repositorios/damm-knowledgeops/docs/ENTERPRISE_PROFESSIONALIZATION_PROPOSAL.md).
+2. **Tier 2: Despliegue Industrial Hybrid (~285 EUR/mes):**
+   - Incorpora VPC privada con AWS PrivateLink (sin salida a Internet), conexion VPN con las fabricas, motor vectorial Aurora Serverless v2 PostgreSQL con `pgvector`, federacion SSO con Microsoft Entra ID y proteccion perimetral con AWS WAF.
+   - Disenado para produccion en 1 o 2 fabricas principales (El Prat de Llobregat / Santa Coloma).
+
+3. **Tier 3: Despliegue Mission-Critical Multi-Planta (~1.315 - 2.380 EUR/mes):**
+   - Multi-Account Landing Zone (AWS Control Tower), Bedrock Knowledge Bases con OpenSearch Serverless, AWS Direct Connect, Network Firewall, exportacion a SIEM corporativo (Splunk/Wazuh), CloudHSM FIPS 140-2 Nivel 3 y Disaster Recovery multi-region (`eu-west-1` + `eu-central-1`) para cumplimiento estricto de **NIS 2**, **ISO 27001** y **ENS**.
+   - Consultar la especificacion y justificacion economica completa en: [`ENTERPRISE_PROFESSIONALIZATION_PROPOSAL.md`](file:///c:/Users/Creep/Documents/Git%20Repositorios/damm-knowledgeops/docs/ENTERPRISE_PROFESSIONALIZATION_PROPOSAL.md).
 
 ---
 

@@ -126,16 +126,13 @@ This platform is engineered to operate strictly within a **0 - 5 EUR / month** d
 
 ---
 
-## 6. Enterprise Scaling & Production Roadmap
+## 6. Enterprise Scaling & Multi-Tier Production Proposals
 
-For organizations adopting this system at scale (such as **Damm** moving beyond the MetròpolisFPLab pilot to full multi-plant production), a comprehensive enterprise scaling roadmap is available:
+For organizations adopting this system at scale (such as **Damm** moving beyond the MetròpolisFPLab pilot to full multi-plant production), a comprehensive 3-tier enterprise professionalization proposal is available in [`docs/ENTERPRISE_PROFESSIONALIZATION_PROPOSAL.md`](file:///c:/Users/Creep/Documents/Git%20Repositorios/damm-knowledgeops/docs/ENTERPRISE_PROFESSIONALIZATION_PROPOSAL.md):
 
-- **Enterprise Proposal & TCO:** Detailed in [`docs/ENTERPRISE_PROFESSIONALIZATION_PROPOSAL.md`](file:///c:/Users/Creep/Documents/Git%20Repositorios/damm-knowledgeops/docs/ENTERPRISE_PROFESSIONALIZATION_PROPOSAL.md).
-- **Hybrid Networking:** AWS Transit Gateway, AWS Direct Connect and AWS PrivateLink VPC Endpoints.
-- **Corporate Identity:** SAML 2.0 / SCIM federation with Microsoft Entra ID (Azure AD) and Okta.
-- **Bedrock Guardrails:** Managed PII masking, custom blocked topics (brewery formulas, IP) and automated hallucination filters.
-- **Industrial Edge Resiliency:** Local offline fallback via AWS Outposts / IoT Greengrass for zero downtime during WAN outages.
-- **SIEM Integration:** Real-time log streaming to Splunk, Wazuh Enterprise, or Datadog via Amazon Kinesis Firehose.
+* **Tier 1 — Lean Serverless (~32 EUR/month):** 100% Serverless Pay-per-Use, Bedrock Guardrails, in-memory vector search with S3 + KMS, DynamoDB On-Demand, Cognito + MFA, GuardDuty and Security Hub. Ideal for pilot line validation with zero idle cost.
+* **Tier 2 — Industrial Hybrid (~285 EUR/month):** Private VPC with Site-to-Site VPN, AWS PrivateLink VPC Endpoints (zero public internet transit), Amazon Aurora Serverless v2 PostgreSQL with `pgvector`, Microsoft Entra ID (Azure AD) SSO federation via SAML/SCIM, and AWS WAF. Designed for production in 1-2 major factories (e.g. El Prat & Santa Coloma).
+* **Tier 3 — Mission-Critical Multi-Plant (~1,315 - 2,380 EUR/month):** Multi-Account AWS Control Tower Landing Zone, Bedrock Knowledge Bases with Amazon OpenSearch Serverless (4 OCUs HA), AWS Direct Connect + Transit Gateway, AWS Network Firewall (Suricata), Bedrock Guardrails with grounding filters, Kinesis Firehose streaming to corporate SIEM (Splunk/Wazuh), CloudHSM (FIPS 140-2 Level 3) and Multi-Region Disaster Recovery (`eu-west-1` + `eu-central-1`) fulfilling European **NIS 2**, **ISO 27001**, and **ENS** regulations.
 
 ---
 
@@ -148,7 +145,7 @@ For organizations adopting this system at scale (such as **Damm** moving beyond 
 │       └── devsecops.yml        # CI/CD security pipeline (Gitleaks, Semgrep, Trivy, Checkov)
 ├── backend/                     # Python 3.11 serverless backend
 │   ├── app/
-│   │   ├── assistant.py         # Bedrock inference & prompt safety layer
+│   │   ├── assistant.py         # Bedrock inference & prompt safety layer (with Guardrail support)
 │   │   ├── incidents.py         # Industrial incident tracking & troubleshooting
 │   │   ├── ingestion.py         # S3 document processing & Titan embeddings
 │   │   ├── main.py              # FastAPI application entrypoint (Mangum ASGI)
@@ -163,15 +160,17 @@ For organizations adopting this system at scale (such as **Damm** moving beyond 
 │       ├── api.tf               # API Gateway HTTP API & backend Lambda
 │       ├── cognito.tf           # Cognito User Pool, Client & RBAC groups
 │       ├── database.tf          # DynamoDB tables (documents, incidents, training)
+│       ├── guardrails.tf        # Amazon Bedrock Guardrail (PII masking & formula protection)
 │       ├── ingestion.tf         # S3 document processing Lambda trigger
 │       ├── observability.tf     # CloudWatch log groups (14-day retention) & alarms
-│       ├── outputs.tf           # Terraform output parameters
+│       ├── outputs.tf           # Terraform output parameters (APIs, Buckets, Guardrails)
 │       ├── providers.tf         # AWS provider definition (eu-west-1)
+│       ├── security_services.tf # AWS GuardDuty & AWS Security Hub CSPM
 │       ├── storage.tf           # S3 raw/processed buckets & KMS customer-managed key
 │       └── variables.tf         # Parameterized environment variables
 ├── docs/                        # Architecture guides, threat models & handover procedures
 │   ├── ARCHITECTURE_AND_RAG.md  # Deep dive into RAG vector math & cost optimizations
-│   ├── ENTERPRISE_PROFESSIONALIZATION_PROPOSAL.md # Enterprise roadmap for Damm production
+│   ├── ENTERPRISE_PROFESSIONALIZATION_PROPOSAL.md # Multi-tier enterprise roadmap for Damm production
 │   ├── HANDOVER_GUIDE.md        # Technical transfer guide for Damm's IT team
 │   └── SECURITY_AND_COMPLIANCE.md # Security posture, threat model & compliance analysis
 ├── .gitignore                   # Strict security exclusions (no keys, no .env, no state files)

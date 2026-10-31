@@ -50,7 +50,7 @@ resource "aws_iam_role_policy" "lambda_api_policy" {
       },
       {
         Effect = "Allow"
-        Action = ["bedrock:InvokeModel"]
+        Action = ["bedrock:InvokeModel", "bedrock:ApplyGuardrail"]
         Resource = "*"
       },
       {
@@ -74,10 +74,12 @@ resource "aws_lambda_function" "backend_api" {
 
   environment {
     variables = {
-      DOCUMENTS_TABLE  = aws_dynamodb_table.documents.name
-      INCIDENTS_TABLE  = aws_dynamodb_table.incidents.name
-      TRAINING_TABLE   = aws_dynamodb_table.training.name
-      PROCESSED_BUCKET = aws_s3_bucket.processed_docs.id
+      DOCUMENTS_TABLE          = aws_dynamodb_table.documents.name
+      INCIDENTS_TABLE          = aws_dynamodb_table.incidents.name
+      TRAINING_TABLE           = aws_dynamodb_table.training.name
+      PROCESSED_BUCKET         = aws_s3_bucket.processed_docs.id
+      BEDROCK_GUARDRAIL_ID      = aws_bedrock_guardrail.damm_kops_guardrail.guardrail_id
+      BEDROCK_GUARDRAIL_VERSION = aws_bedrock_guardrail_version.damm_kops_guardrail_v1.version
     }
   }
 }

@@ -1,8 +1,11 @@
 import json
+import os
 import boto3
 
 bedrock = boto3.client('bedrock-runtime', region_name='eu-west-1')
 MODEL_ID = 'anthropic.claude-3-haiku-20240307-v1:0'
+GUARDRAIL_ID = os.environ.get('BEDROCK_GUARDRAIL_ID')
+GUARDRAIL_VERSION = os.environ.get('BEDROCK_GUARDRAIL_VERSION', '1')
 
 SYSTEM_PROMPT = """Eres el Asistente Tecnico de Operaciones Industriales de Damm KnowledgeOps.
 Tu objetivo es ayudar a tecnicos y operarios a operar maquinaria, calibrar equipos y solucionar averias de forma segura y eficiente.
@@ -45,15 +48,27 @@ def ask_industrial_assistant(query: str, context_chunks: list[dict]) -> dict:
         ]
     }
 
-    response = bedrock.invoke_model(
-        modelId=MODEL_ID,
-        body=json.dumps(payload),
-        contentType='application/json',
-        accept='application/json'
-    )
-    
-    result = json.loads(response['body'].read())
-    answer_text = result['content'][0]['text']
+    invoke_kwargs = {
+        "modelId": MODEL_ID,
+        "body": json.dumps(payload),
+        "contentType": "application/json",
+        "accept": "application/json"
+    }
+
+    if GUARDRAIL_ID:
+        invoke_kwargs["guardrailIdentifier"] = GUARDRAIL_ID
+        invoke_kwargs["guardrailVersion"] = GUARDRAIL_VERSION
+
+    try:
+        response = bedrock.invoke_model(**invoke_kwargs)
+        result = json.loads(response['body'].read())
+        answer_text = result['content'][0]['text']
+    except Exception as e:
+        error_msg = str(e)
+        if "Guardrail" in error_msg:
+            answer_text = "Consulta bloqueada por politicas de seguridad operacional y gobernanza de Damm KnowledgeOps (Guardrail interceptado)."
+        else:
+            raise e
     
     sources = [{"doc_name": c['doc_name'], "chunk_index": c['chunk_index'], "score": c['score']} for c in context_chunks]
 
