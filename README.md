@@ -2,11 +2,10 @@
 
 [![AWS Cloud-Native](https://img.shields.io/badge/AWS-Cloud--Native%20Serverless-232F3E?logo=amazon-aws&logoColor=white)](https://aws.amazon.com/)
 [![Amazon Bedrock](https://img.shields.io/badge/AI-Amazon%20Bedrock%20%7C%20Claude%203.5-7B2CBF)](https://aws.amazon.com/bedrock/)
-[![Backend](https://img.shields.io/badge/Backend-Python%203.11%20%7C%20FastAPI%20%7C%20Lambda-3776AB?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
-[![Frontend](https://img.shields.io/badge/Frontend-Next.js%2014%20%7C%20TypeScript%20%7C%20Tailwind-000000?logo=next.js&logoColor=white)](https://nextjs.org/)
-[![Database](https://img.shields.io/badge/Database-Amazon%20DynamoDB%20On--Demand-4053D6?logo=amazondynamodb&logoColor=white)](https://aws.amazon.com/dynamodb/)
-[![IaC](https://img.shields.io/badge/IaC-HashiCorp%20Terraform-844FBA?logo=terraform&logoColor=white)](https://www.terraform.io/)
-[![DevSecOps](https://img.shields.io/badge/DevSecOps-Gitleaks%20%7C%20Semgrep%20%7C%20Trivy%20%7C%20Checkov-blueviolet?logo=github-actions&logoColor=white)](https://github.com/features/actions)
+[![Challenge](https://img.shields.io/badge/Challenge-Metr%C3%B2polisFPLab%20%7C%20Damm-C8102E)](https://www.metropolisfplab.cat/)
+[![Architecture](https://img.shields.io/badge/Architecture-100%25%20Serverless%20Pay--per--Use-blue)](docs/ARCHITECTURE_AND_RAG.md)
+[![Security](https://img.shields.io/badge/Security-Zero%20Trust%20%7C%20Bedrock%20Guardrails-green)](docs/SECURITY_AND_COMPLIANCE.md)
+[![DevSecOps](https://img.shields.io/badge/DevSecOps-Gitleaks%20%7C%20Semgrep%20%7C%20Checkov-blueviolet)](docs/SECURITY_AND_COMPLIANCE.md)
 
 ---
 
@@ -14,15 +13,15 @@
 
 > [!IMPORTANT] Marco del Proyecto y Seguridad de la Informacion
 > **Castellano:**
-> Este repositorio constituye una **propuesta tecnica, academica y de arquitectura cloud** desarrollada como solucion al reto de innovacion abierta **MetròpolisFPLab** presentado por **Damm**.
+> Este repositorio constituye el **centro de documentacion tecnica, arquitectura cloud y propuesta estrategica** desarrollada como solucion al reto de innovacion abierta **MetròpolisFPLab** presentado por **Damm**.
 > - **Cero Datos Corporativos Reales:** Este repositorio **NO contiene, utiliza ni expone ninguna documentacion confidencial, secretos industriales, recetas de elaboracion, credenciales internas ni acceso a redes de Damm**.
-> - **Entorno de Datos Sinteticos:** El 100% de los manuales tecnicos de maquinaria, codigos de averia, diagramas de troubleshooting y evaluaciones de operarios utilizados en este prototipo son **completamente sinteticos, ficticios o basados en especificaciones publicas genericas de fabricantes OEM**.
-> - **Arquitectura Aislada:** La solucion esta disenada bajo el principio de *Customer-Owned Infrastructure*, concebida para que Damm pueda desplegarla de manera independiente dentro de su propia cuenta corporativa de AWS con sus propias claves KMS tras una transferencia formal.
+> - **Entorno de Datos Sinteticos:** El 100% de los manuales tecnicos de maquinaria, codigos de averia, diagramas de troubleshooting y evaluaciones de operarios analizados en esta propuesta son **completamente sinteticos, ficticios o basados en especificaciones publicas genericas de fabricantes OEM**.
+> - **Arquitectura Aislada:** La solucion esta concebida bajo el principio de *Customer-Owned Infrastructure*, disenada para que Damm pueda desplegarla de manera independiente dentro de su propia cuenta corporativa de AWS con sus propias claves KMS tras una transferencia formal.
 >
 > **English:**
-> This repository represents an **academic cloud architecture and software engineering proposal** developed for the **MetròpolisFPLab** open innovation challenge presented by **Damm**.
+> This repository represents the **technical documentation, cloud architecture, and strategic proposal center** developed for the **MetròpolisFPLab** open innovation challenge presented by **Damm**.
 > - **Zero Production Data Policy:** This repository does **NOT contain, access, or expose any confidential Damm systems, real production recipes, employee records, internal network endpoints, or private credentials**.
-> - **Synthetic Dataset:** All machinery manuals, maintenance SOPs, error codes, and assessment quizzes used across this codebase are **100% synthetic, fictional, or derived from generic public OEM equipment specifications**.
+> - **Synthetic Dataset:** All machinery manuals, maintenance SOPs, error codes, and assessment quizzes referenced are **100% synthetic, fictional, or derived from generic public OEM equipment specifications**.
 > - **Air-Gapped Design:** The architecture follows strict zero-trust parameters, designed to be deployed independently inside Damm's private AWS account via parameterized Terraform modules upon formal handover.
 
 ---
@@ -36,6 +35,7 @@ The platform transforms tacit, fragmented industrial knowledge into structured, 
 2. **Guided Incident Troubleshooting:** Step-by-step diagnostic workflows assisting maintenance technicians during unplanned line stops.
 3. **Knowledge Preservation:** Systematic capture and validation of expert technician procedures before staff turnover or retirement.
 4. **Zero-Hallucination Industrial RAG:** Domain-grounded conversational assistant that quotes approved procedures by document, section, and page, enforcing strict abstention and human escalation on safety-critical interventions.
+5. **Kaizen & Worker Voice:** Dedicated conversational channel for ergonomics, health improvements, and plant optimization with complete anonymity control, troll filtering, and supervisor priority triage.
 
 ---
 
@@ -68,6 +68,7 @@ AWS Serverless Backend (eu-west-1)                                              
 |  | - Chat Ingestion & Vector Retrieval Engine                                                     |  |
 |  | - Incident Registration & Step-by-Step Troubleshooting                                          |  |
 |  | - Operator Training Progression & Quiz Scoring                                                 |  |
+|  | - Kaizen, Ergonomics & Worker Voice Processing                                                 |  |
 |  +-------------------------------------------------------------------------------------------------+  |
 |               |                                       |                                   |           |
 |     [ Read/Write Metadata ]                 [ Vector Search ]                   [ RAG Inference ]     |
@@ -77,8 +78,9 @@ AWS Serverless Backend (eu-west-1)                                              
 |  | Mode: PAY_PER_REQUEST   |             | - raw-docs (KMS CMK)     |    | - Titan Embeddings v2   |  |
 |  | - documents metadata    |             | - processed-docs         |    | - Claude 3.5 Sonnet     |  |
 |  | - plant incidents       |             | S3 Trigger -> Lambda     |    | - Claude 3 Haiku        |  |
-|  | - training progress     |             | text extraction & chunks |    +-------------------------+  |
-|  +-------------------------+             +--------------------------+                                 |
+|  | - training progress     |             | text extraction & chunks |    | - Bedrock Guardrails    |  |
+|  | - proposals (Kaizen)    |             +--------------------------+    +-------------------------+  |
+|  +-------------------------+                                                                          |
 +=======================================================================================================+
                                               |
                           [ Audit Logging & Operational Metrics ]
@@ -129,7 +131,7 @@ This platform is engineered to operate strictly within a **0 - 5 EUR / month** d
 
 ## 6. Enterprise Scaling & Multi-Tier Production Proposals
 
-For organizations adopting this system at scale (such as **Damm** moving beyond the MetròpolisFPLab pilot to full multi-plant production), a comprehensive 3-tier enterprise professionalization proposal is available in [`docs/ENTERPRISE_PROFESSIONALIZATION_PROPOSAL.md`](file:///c:/Users/Creep/Documents/Git%20Repositorios/damm-knowledgeops/docs/ENTERPRISE_PROFESSIONALIZATION_PROPOSAL.md):
+For organizations adopting this system at scale (such as **Damm** moving beyond the MetròpolisFPLab pilot to full multi-plant production), a comprehensive 3-tier enterprise professionalization proposal is available in [`docs/ENTERPRISE_PROFESSIONALIZATION_PROPOSAL.md`](docs/ENTERPRISE_PROFESSIONALIZATION_PROPOSAL.md):
 
 * **Tier 1 — Lean Serverless (~32 EUR/month):** 100% Serverless Pay-per-Use, Bedrock Guardrails, in-memory vector search with S3 + KMS, DynamoDB On-Demand, Cognito + MFA, GuardDuty and Security Hub. Ideal for pilot line validation with zero idle cost.
 * **Tier 2 — Industrial Hybrid (~285 EUR/month):** Private VPC with Site-to-Site VPN, AWS PrivateLink VPC Endpoints (zero public internet transit), Amazon Aurora Serverless v2 PostgreSQL with `pgvector`, Microsoft Entra ID (Azure AD) SSO federation via SAML/SCIM, and AWS WAF. Designed for production in 1-2 major factories (e.g. El Prat & Santa Coloma).
@@ -137,49 +139,19 @@ For organizations adopting this system at scale (such as **Damm** moving beyond 
 
 ---
 
-## 7. Repository Structure
+## 7. Centro de Documentacion Tecnica / Documentation Center
 
-```
-.
-├── .github/
-│   └── workflows/
-│       └── devsecops.yml        # CI/CD security pipeline (Gitleaks, Semgrep, Trivy, Checkov)
-├── backend/                     # Python 3.11 serverless backend
-│   ├── app/
-│   │   ├── assistant.py         # Bedrock inference & prompt safety layer (with Guardrail support)
-│   │   ├── incidents.py         # Industrial incident tracking & troubleshooting
-│   │   ├── ingestion.py         # S3 document processing & Titan embeddings
-│   │   ├── main.py              # FastAPI application entrypoint (Mangum ASGI)
-│   │   ├── proposals.py         # Kaizen & ergonomics worker feedback (troll-filter, anonymity)
-│   │   ├── rag_engine.py        # Vector similarity search & metadata filtering
-│   │   └── training.py          # Operator learning paths & assessment routes
-│   ├── scripts/
-│   │   └── generate_synthetic_docs.py # Generator for fictional plant procedures
-│   └── tests/                   # Pytest automated test suite
-│       ├── test_proposals.py    # Unit tests for ergonomics priority & anonymity
-│       └── test_rag_engine.py   # Unit tests for vector cosine similarity
-├── frontend/                    # Next.js 14 App Router (TypeScript + Tailwind CSS)
-├── infrastructure/
-│   └── terraform/               # Declarative IaC manifests
-│       ├── api.tf               # API Gateway HTTP API & backend Lambda
-│       ├── cognito.tf           # Cognito User Pool, Client & RBAC groups
-│       ├── database.tf          # DynamoDB tables (documents, incidents, training)
-│       ├── guardrails.tf        # Amazon Bedrock Guardrail (PII masking & formula protection)
-│       ├── ingestion.tf         # S3 document processing Lambda trigger
-│       ├── observability.tf     # CloudWatch log groups (14-day retention) & alarms
-│       ├── outputs.tf           # Terraform output parameters (APIs, Buckets, Guardrails)
-│       ├── providers.tf         # AWS provider definition (eu-west-1)
-│       ├── security_services.tf # AWS GuardDuty & AWS Security Hub CSPM
-│       ├── storage.tf           # S3 raw/processed buckets & KMS customer-managed key
-│       └── variables.tf         # Parameterized environment variables
-├── docs/                        # Architecture guides, threat models & handover procedures
-│   ├── ARCHITECTURE_AND_RAG.md  # Deep dive into RAG vector math & cost optimizations
-│   ├── ENTERPRISE_PROFESSIONALIZATION_PROPOSAL.md # Multi-tier enterprise roadmap for Damm production
-│   ├── HANDOVER_GUIDE.md        # Technical transfer guide for Damm's IT team
-│   └── SECURITY_AND_COMPLIANCE.md # Security posture, threat model & compliance analysis
-├── .gitignore                   # Strict security exclusions (no keys, no .env, no state files)
-└── README.md                    # Project documentation
-```
+Toda la informacion estrategica, arquitectura y especificaciones del proyecto se encuentra estructurada en la carpeta [`docs/`](docs/):
+
+- [`docs/EXECUTIVE_PRESENTATION.md`](docs/EXECUTIVE_PRESENTATION.md): Presentacion ejecutiva completa del proyecto para direccion, comite de innovacion y jurado MetròpolisFPLab.
+- [`docs/FUNCTIONAL_SPECIFICATIONS.md`](docs/FUNCTIONAL_SPECIFICATIONS.md): Especificaciones funcionales exhaustivas de los Modulos A a G (incluyendo Kaizen, Ergonomia y Voz del Operario).
+- [`docs/ARCHITECTURE_AND_RAG.md`](docs/ARCHITECTURE_AND_RAG.md): Arquitectura cloud en detalle, seleccion de servicios serverless y matematicas del motor RAG.
+- [`docs/ENTERPRISE_PROFESSIONALIZATION_PROPOSAL.md`](docs/ENTERPRISE_PROFESSIONALIZATION_PROPOSAL.md): Estudio comparativo y economico detallado de los tres niveles empresariales (Tier 1, Tier 2 y Tier 3).
+- [`docs/SECURITY_AND_COMPLIANCE.md`](docs/SECURITY_AND_COMPLIANCE.md): Modelo de amenazas, directivas de IA responsable (OWASP Top 10 LLM), controles criptograficos y aislamiento.
+- [`docs/HANDOVER_GUIDE.md`](docs/HANDOVER_GUIDE.md): Guia de despliegue y transferencia formal para el equipo de Cloud & Ciberseguridad de Damm.
+
+> [!NOTE] Nota sobre el Codigo Fuente
+> Este repositorio publico actua como centro de documentacion, arquitectura y propuesta para la evaluacion del reto. Los modulos de codigo fuente del backend y manifiestos IaC de Terraform se gestionan en ramas tecnicas de desarrollo (`dev/full-code`) y repositorios privados de control de versiones, transferibles a Damm durante la fase de despliegue.
 
 ---
 
