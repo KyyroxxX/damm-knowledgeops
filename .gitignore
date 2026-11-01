@@ -6,6 +6,12 @@
 credentials
 .aws/
 
+# Modulos de codigo e infraestructura locales (excluidos de la publicacion publica en GitHub)
+backend/
+infrastructure/
+frontend/
+.github/workflows/
+
 # Terraform Local State and Providers
 *.tfstate
 *.tfstate.*
