@@ -101,6 +101,7 @@ AWS Serverless Backend (eu-west-1)                                              
 | **Module D: Incident Troubleshooting** | Interactive breakdown diagnostics, resolution auditing, and automated SOP promotion. | FastAPI, DynamoDB, Bedrock. |
 | **Module E: Training & Assessments** | Departmental learning paths and automated procedural quizzes. | Next.js, DynamoDB, Python backend. |
 | **Module F: Audit & DevSecOps** | Cost governance, least-privilege IAM, and continuous security testing. | AWS Budgets, CloudWatch, Terraform, GitHub Actions. |
+| **Module G: Kaizen & Worker Voice** | Dedicated channel for ergonomics/workplace improvements, troll filtering, priority scoring, anonymous/identified submission, and supervisor dashboard. | FastAPI, Bedrock Claude 3, DynamoDB. |
 
 ---
 
@@ -149,11 +150,14 @@ For organizations adopting this system at scale (such as **Damm** moving beyond 
 │   │   ├── incidents.py         # Industrial incident tracking & troubleshooting
 │   │   ├── ingestion.py         # S3 document processing & Titan embeddings
 │   │   ├── main.py              # FastAPI application entrypoint (Mangum ASGI)
+│   │   ├── proposals.py         # Kaizen & ergonomics worker feedback (troll-filter, anonymity)
 │   │   ├── rag_engine.py        # Vector similarity search & metadata filtering
 │   │   └── training.py          # Operator learning paths & assessment routes
 │   ├── scripts/
 │   │   └── generate_synthetic_docs.py # Generator for fictional plant procedures
 │   └── tests/                   # Pytest automated test suite
+│       ├── test_proposals.py    # Unit tests for ergonomics priority & anonymity
+│       └── test_rag_engine.py   # Unit tests for vector cosine similarity
 ├── frontend/                    # Next.js 14 App Router (TypeScript + Tailwind CSS)
 ├── infrastructure/
 │   └── terraform/               # Declarative IaC manifests

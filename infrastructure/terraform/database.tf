@@ -102,6 +102,45 @@ resource "aws_dynamodb_table" "training" {
   }
 }
 
+resource "aws_dynamodb_table" "proposals" {
+  name         = "damm-kops-proposals"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "PK"
+  range_key    = "SK"
+
+  attribute {
+    name = "PK"
+    type = "S"
+  }
+
+  attribute {
+    name = "SK"
+    type = "S"
+  }
+
+  attribute {
+    name = "GSI1PK"
+    type = "S"
+  }
+
+  attribute {
+    name = "GSI1SK"
+    type = "S"
+  }
+
+  global_secondary_index {
+    name            = "GSI1"
+    hash_key        = "GSI1PK"
+    range_key       = "GSI1SK"
+    projection_type = "ALL"
+  }
+
+  server_side_encryption {
+    enabled     = true
+    kms_key_arn = aws_kms_key.damm_kops_key.arn
+  }
+}
+
 output "dynamodb_documents_table" {
   value = aws_dynamodb_table.documents.name
 }
@@ -112,4 +151,8 @@ output "dynamodb_incidents_table" {
 
 output "dynamodb_training_table" {
   value = aws_dynamodb_table.training.name
+}
+
+output "dynamodb_proposals_table" {
+  value = aws_dynamodb_table.proposals.name
 }

@@ -9,6 +9,7 @@ from app.rag_engine import retrieve_relevant_chunks
 from app.assistant import ask_industrial_assistant
 from app.incidents import router as incidents_router
 from app.training import router as training_router
+from app.proposals import router as proposals_router
 
 app = FastAPI(
     title="Damm KnowledgeOps API",
@@ -18,6 +19,7 @@ app = FastAPI(
 
 app.include_router(incidents_router)
 app.include_router(training_router)
+app.include_router(proposals_router)
 
 security = HTTPBearer()
 
